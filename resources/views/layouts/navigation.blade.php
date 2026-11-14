@@ -33,6 +33,12 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        @if (auth()->user()->role == 'admin')
+                                  <x-dropdown-link href="/settings">
+                                    Settings
+                                </x-dropdown-link>
+                            @endif
+                       
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

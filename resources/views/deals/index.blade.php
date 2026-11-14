@@ -6,7 +6,7 @@
     <div class="py-12 max-w-6xl mx-auto px-4">
 
         <div class="flex justify-between items-center mb-6">
-            <p class="text-gray-500 text-sm">{{ $deals->count() }} total Deals</p>
+            <p class="text-gray-500 text-sm"> {{ $deals->total() }} total Deals</p>
             <a href="/deals/create" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-sm text-sm font-medium">
                 + Add Deals
             </a>
@@ -34,8 +34,8 @@
                             <td class="p-4 font-medium text-gray-800">{{$deal->title }}</td>
                             <td class="p-4 text-gray-600">{{ $deal->status }}</td>
                             <td class="p-4 text-gray-600">{{ $deal->amount }}</td>
-                            <td class="p-4 text-gray-600">{{ $deal->start_date }}</td>
-                            <td class="p-4 text-gray-600">{{ $deal->due_date }}</td>
+                            <td class="p-4 text-gray-600">{{ $deal->start_date?->format('Y-m-d') }}</td>
+                            <td class="p-4 text-gray-600">{{ $deal->due_date?->format('Y-m-d') }}</td>
 
 
                             <td class="p-4 text-gray-600">
@@ -44,7 +44,7 @@
                                 @endforeach
                             </td>
                           
-                             <td class="p-4 text-gray-600">{{ $deal->client->name }}</td>
+                             <td class="p-4 text-gray-600">{{ $deal->users->pluck('name')->join(', ') }}</td>
                             <td class="p-4">
                                 <div class="flex items-center gap-3 text-sm">
                                     <a href="/deals/{{ $deal->id }}" class="text-indigo-600 hover:underline">View</a>
@@ -60,6 +60,10 @@
                     @endforeach
                 </tbody>
             </table>
+              <div class="mt-4">
+                {{ $deals->links() }}
+            </div>
+                            
         </div>
 
     </div>

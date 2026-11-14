@@ -20,6 +20,7 @@
                 <p class="text-xs uppercase text-gray-400">Email</p>
                 <p class="text-gray-800">{{ $client->email }}</p>
             </div>
+            
             <div>
                 <p class="text-xs uppercase text-gray-400">Phone</p>
                 <p class="text-gray-800">{{ $client->phone }}</p>

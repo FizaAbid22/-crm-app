@@ -32,6 +32,12 @@
         <a href="/deals" class="@if(request()->is('deals*')) bg-indigo-600 text-white @else text-slate-300 hover:bg-slate-800 @endif block px-4 py-2 rounded-lg">
             Deals
         </a>
+        <a href="/leads" class="@if(request()->is('leads*')) bg-indigo-600 text-white @else text-slate-300 hover:bg-slate-800 @endif block px-4 py-2 rounded-lg">
+            Leads
+        </a>
+        <a href="/time-logs" class="@if(request()->is('time-logs*')) bg-indigo-600 text-white @else text-slate-300 hover:bg-slate-800 @endif block px-4 py-2 rounded-lg">
+            Time Logs
+        </a>
     </nav>
 </aside>
 

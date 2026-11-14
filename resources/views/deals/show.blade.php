@@ -9,23 +9,29 @@
     <div class="py-12 max-w-2xl mx-auto px-4" x-data="{ activeTab: 'overview' }">
 
         {{-- Tab buttons --}}
-<div class="flex gap-2 mb-4">
-    <button @click="activeTab = 'overview'"
-        :class="activeTab === 'overview' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
-        class="px-4 py-2 rounded-lg text-sm font-medium">
-        Overview
-    </button>
-    <button @click="activeTab = 'tasks'"
-        :class="activeTab === 'tasks' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
-        class="px-4 py-2 rounded-lg text-sm font-medium">
-        Tasks
-    </button>
-    <button @click="activeTab = 'comments'"
-        :class="activeTab === 'comments' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
-        class="px-4 py-2 rounded-lg text-sm font-medium">
-        Comments
-    </button>
-</div>
+        <div class="flex gap-2 mb-4">
+            <button @click="activeTab = 'overview'"
+                :class="activeTab === 'overview' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
+                class="px-4 py-2 rounded-lg text-sm font-medium">
+                Overview
+            </button>
+            <button @click="activeTab = 'tasks'"
+                :class="activeTab === 'tasks' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
+                class="px-4 py-2 rounded-lg text-sm font-medium">
+                Tasks
+            </button>
+            <button @click="activeTab = 'comments'"
+                :class="activeTab === 'comments' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
+                class="px-4 py-2 rounded-lg text-sm font-medium">
+                Comments
+            </button>
+            <button @click="activeTab = 'activity'"
+                :class="activeTab === 'activity' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-800 border border-gray-300'"
+                class="px-4 py-2 rounded-lg text-sm font-medium">
+                Activity
+            </button>
+        </div>
+
         {{-- Overview tab --}}
         <div x-show="activeTab === 'overview'">
             <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
@@ -173,6 +179,31 @@
                         </div>
                     @empty
                         <p class="px-6 py-4 text-sm text-gray-400">No comments yet.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        {{-- Activity tab --}}
+        <div x-show="activeTab === 'activity'">
+            <div class="bg-white shadow-sm rounded-xl border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100">
+                    <h3 class="font-semibold text-gray-800">Activity</h3>
+                </div>
+
+                <div class="divide-y divide-gray-100">
+                    @forelse ($deals->activities->sortByDesc('created_at') as $activity)
+                        <div class="px-6 py-4">
+                            <p class="text-sm text-gray-800">
+                                <span class="font-medium">{{ $activity->user->name }}</span>
+                                {{ $activity->description }}
+                            </p>
+                            <p class="text-xs text-gray-400 mt-1">
+                                {{ $activity->created_at->format('d M, Y g:i A') }}
+                            </p>
+                        </div>
+                    @empty
+                        <p class="px-6 py-4 text-sm text-gray-400">No activity yet.</p>
                     @endforelse
                 </div>
             </div>

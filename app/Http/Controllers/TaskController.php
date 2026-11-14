@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\TaskAssigned;
+use App\Models\Activity;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +23,12 @@ class TaskController extends Controller
     $validate['deal_id'] = $deal;
 
     $task = Task::create($validate);
-
+    Activity::create([
+        'user_id' => auth()->id(),
+        'deal_id' => $deal,
+        'description' => 'Created a task: ' . $task->title,
+    ]);
+    
     $task->users()->attach($request->users ?? []);
     $assignedUsers = User::whereIn('id',$request->users ?? [])->get(); 
         foreach ($assignedUsers as $user) {

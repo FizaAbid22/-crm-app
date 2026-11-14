@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DealWon;
+use App\Models\Activity;
 use App\Models\Client;
 use App\Models\Deal;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\DealWon;
 
 class DealController extends Controller
 {
@@ -16,7 +17,8 @@ class DealController extends Controller
      */
     public function index()
     {
-        $deals = Deal::all();
+       $deals = Deal::with('client', 'users')->paginate(10);
+
         return view('deals.index',['deals'=>$deals]);
        
     }
@@ -46,7 +48,12 @@ class DealController extends Controller
 
         ]);
 
-        $deals = Deal::create($validate);
+       $deals = Deal::create($validate);
+        Activity::create([
+            'user_id' => auth()->id(),
+            'deal_id' => $deals->id,
+            'description' => 'Created this deal with status ' . $deals->status,
+        ]);
         $deals->users()->attach($request->users ?? []);
 
         return redirect('/deals');
@@ -58,6 +65,7 @@ class DealController extends Controller
     public function show(string $id)
     {
         $deals = Deal::findOrfail($id);
+        $deals->load('activities.user');
         $users = User::all();
         return view('deals.show', ['deals' => $deals, 'users' => $users]);
     }
@@ -91,8 +99,16 @@ class DealController extends Controller
             'start_date' => 'required|date',
         ]);
         $deal = Deal::findOrFail($id);
+        $oldStatus = $deal->status;
         $deal->update($validate);
-        if($deal->status == 'Won')
+        if ($oldStatus != $deal->status) {
+            Activity::create([
+                'user_id' => auth()->id(),
+                'deal_id' => $deal->id,
+                'description' => 'Changed status to ' . $deal->status,
+            ]);
+        }
+                if($deal->status == 'Won')
             {
                 Mail::to('fizaabid2211@gmail.com')->queue(new DealWon($deal));
             }

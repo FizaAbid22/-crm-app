@@ -78,11 +78,18 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        $client = Client::findOrfail($id);
-        $client->delete();
-        return redirect('/clients');
+   public function destroy(string $id)
+{
+    $client = Client::findOrFail($id);
 
+    if ($client->deals()->exists()) {
+        return redirect('/clients')
+            ->with('error', 'You cannot delete this client because it has an active deal.');
     }
+
+    $client->delete();
+
+    return redirect('/clients')
+        ->with('success', 'Client deleted successfully.');
+}
 }

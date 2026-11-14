@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Activity;
 use App\Models\Comment;
+use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
@@ -20,6 +21,13 @@ class CommentController extends Controller
         'deal_id' => $deal_id,
         'user_id' => $current_user,
         'body' => $validate['body']
+
+       ]);
+
+       Activity::create([
+        'user_id'=> auth()->id(),
+        'deal_id'=>  $deal_id,
+        'description'=> 'Posted a comment'
 
        ]);
        return redirect('/deals/' . $deal_id);

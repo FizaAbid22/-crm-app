@@ -1,6 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Clients</h2>
+
+
+        @if(session('error'))
+                <script>
+                    alert("{{ session('error') }}");
+                </script>
+            @endif
+
+            @if(session('success'))
+                <script>
+                    alert("{{ session('success') }}");
+                </script>
+            @endif
     </x-slot>
 
     <div class="py-12 max-w-6xl mx-auto px-4">
